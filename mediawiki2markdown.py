@@ -39,7 +39,7 @@ class BaseConverter(object):
       classname = 'on_'+node.__class__.__name__.lower().replace('@', '')
       f = getattr(self, tagname, getattr(self, classname, None))
       f(node)
-    except AttributeError, e:
+    except (TypeError, AttributeError), e:
       sys.stderr.write('Unknown node: '+(node.tagname or node.__class__.__name__.lower()))
       debugger()
     except Exception, e:
