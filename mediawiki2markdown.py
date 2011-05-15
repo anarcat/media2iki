@@ -187,6 +187,15 @@ class HTMLConverter(BaseConverter):
 
   on_namedurl = on_url
 
+  # XXX: dupe of the MarkdownConverter handler
+  def on_tagnode(self, node):
+    if node.caption == 'hr':
+      self.append('-'*75+'\n')
+    elif node.caption == 'br':
+      self.append('<br>')
+    else:
+      sys.stderr.write( "Unknown tag %s %s\n" % (node, node.caption))
+
   def on_imagelink(self, node):
     self.append("<img src='%s' alt='%s' />'" % (
         node.target.replace('Image:', '').replace(' ', '_'), node.asText()))
