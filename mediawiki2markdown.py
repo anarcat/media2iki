@@ -198,7 +198,7 @@ class HTMLConverter(BaseConverter):
 
   def on_imagelink(self, node):
     self.append("<img src='%s' alt='%s' />'" % (
-        node.target.replace('Image:', '').replace(' ', '_').replace('?', ''), node.asText()))
+        node.target.replace('Image:', '').replace('File:', '').replace(' ', '_').replace('?', ''), node.asText()))
 
   def on_articlelink(self, node):
     for i in ['jpg', 'png', 'gif']:
@@ -206,7 +206,10 @@ class HTMLConverter(BaseConverter):
         self.on_imagelink(node)
         break
     else:
-      self.append("<a href='%s'>%s</a>" % (
+      if node.target.startswith('File:'):
+        self.on_imagelink(node)
+      else:
+        self.append("<a href='%s'>%s</a>" % (
           node.caption.replace(' ', '_').replace('?', ''), node.caption))
 
   def on_namespacelink(self, node):
@@ -215,8 +218,11 @@ class HTMLConverter(BaseConverter):
         self.on_imagelink(node)
         break
     else:
-      node.caption = node.target
-      self.on_url(node)
+      if node.target.startswith('File:'):
+        self.on_imagelink(node)
+      else:
+        node.caption = node.target
+        self.on_url(node)
 
   def produce_dls(self):
     # We need to specially handle defintion lists
@@ -362,7 +368,7 @@ class MarkdownConverter(BaseConverter):
 
   def on_imagelink(self, node):
     self.append('![%s](%s)' % (
-        node.asText(), node.target.replace('Image:', '').replace(' ', '_').replace('?', '')))
+        node.asText(), node.target.replace('Image:', '').replace('File:', '').replace(' ', '_').replace('?', '')))
 
   def on_articlelink(self, node):
     for i in ['jpg', 'png', 'gif']:
@@ -370,7 +376,10 @@ class MarkdownConverter(BaseConverter):
         self.on_imagelink(node)
         break
     else:
-      self.append("[%s](%s)" % (node.target, node.target.replace(' ', '_').replace('?', '')))
+      if node.target.startswith('File:'):
+        self.on_imagelink(node)
+      else:
+        self.append("[%s](%s)" % (node.target, node.target.replace(' ', '_').replace('?', '')))
 
   def on_namespacelink(self, node):
     for i in ['jpg', 'png', 'gif']:
@@ -378,8 +387,11 @@ class MarkdownConverter(BaseConverter):
         self.on_imagelink(node)
         break
     else:
-      node.caption = node.target.replace(' ', '_').replace('?', '')
-      self.on_url(node)
+      if node.target.startswith('File:'):
+        self.on_imagelink(node)
+      else:
+        node.caption = node.target.replace(' ', '_').replace('?', '')
+        self.on_url(node)
 
   def on_section(self, node):
     self.append("\n")
