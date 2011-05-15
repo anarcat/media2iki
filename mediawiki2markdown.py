@@ -370,7 +370,7 @@ class MarkdownConverter(BaseConverter):
         self.on_imagelink(node)
         break
     else:
-      self.append("[%s](/%s)" % (node.target, node.target.replace(' ', '_').replace('?', '')))
+      self.append("[%s](%s)" % (node.target, node.target.replace(' ', '_').replace('?', '')))
 
   def on_namespacelink(self, node):
     for i in ['jpg', 'png', 'gif']:
