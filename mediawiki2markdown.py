@@ -228,6 +228,7 @@ class HTMLConverter(BaseConverter):
       self.append('<br>')
     else:
       sys.stderr.write( "Unknown tag %s %s\n" % (node, node.caption))
+      assert not options.STRICT
 
   def on_imagelink(self, node):
     self.append("<img src='%s' alt='%s' />'" % (
@@ -536,6 +537,7 @@ class MarkdownConverter(BaseConverter):
           divider += '-'*width
         else:
           sys.stderr.write('Unknown alignment %s (%s)' % (cell['align'], cell))
+          assert not options.STRICT
 
         line += f(widths[i])
         line += ' | '
