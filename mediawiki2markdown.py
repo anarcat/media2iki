@@ -71,6 +71,10 @@ class BaseConverter(object):
   def on_text(self, node):
     self.append(node.asText())
 
+  def on_math(self, node):
+    sys.stderr.write("Cannot handle <math> tags yet\n")
+    self.append(node.asText())
+
   def on_style(self, node):
     # Definition list?
     if node.caption == ';':
@@ -472,14 +476,14 @@ class MarkdownConverter(BaseConverter):
         if align == 'right':
           f = rendered.rjust
           divider += '-'*(width-1) + ':'
-        elif align == 'center' or align == 'centre':
+        elif align == 'center' or align == 'centre' or align == 'middle':
           f = rendered.center
           divider += ':' + '-'*(width-2) + ':'
         elif align == 'left':
           f = rendered.ljust
           divider += '-'*width
         else:
-          assert False, 'Unknown alignment %s (%s)' % (cell['align'], cell)
+          sys.stderr.write('Unknown alignment %s (%s)' % (cell['align'], cell))
 
         line += f(widths[i])
         line += ' | '
