@@ -301,6 +301,7 @@ class MarkdownConverter(BaseConverter):
     ast = simpleparse(text.decode('utf-8'))
     sys.stdout = sys_stdout
     self.parse_node(ast)
+    return self.out
 
   def on_blockquote(self, node):
     parser = MarkdownConverter()
@@ -568,8 +569,7 @@ def main(argv):
 
   try:
     c = MarkdownConverter()
-    c.parse(mediawiki)
-    print c.out
+    print c.parse(mediawiki)
   except:
     debugger()
 
