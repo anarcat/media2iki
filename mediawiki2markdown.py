@@ -143,16 +143,14 @@ class BaseConverter(object):
 
         cells.append({'node': cell, 'rendered': cell_data})
 
-      args = {'rowtype': row}
-      if len(row.children):
-        args['celltype'] = row.children[-1]
-      if len(cells):
-        args['cells'] = cells
-      table.append(args)
+      if len(cells) > 0:
+        args = {'rowtype': row, 'cells': cells, 'celltype': row.children[-1]}
+        table.append(args)
 
     for row in table:
-      while len(row['cells']) < table_width:
-        row['cells'].append({'rendered': ''})
+      if 'cells' in row:
+        while len(row['cells']) < table_width:
+          row['cells'].append({'rendered': ''})
 
     self.on_process_table(table_caption, table_column_widths, table)
 
